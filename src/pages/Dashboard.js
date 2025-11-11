@@ -1,52 +1,127 @@
 import React from "react";
-import DonationChart from "../components/DonationChart";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import html2canvas from "html2canvas";
+import { motion } from "framer-motion";
 
-const Dashboard = () => {
-  const donations = [
-    { month: "Jan", amount: 1200 },
-    { month: "Feb", amount: 2100 },
-    { month: "Mar", amount: 800 },
-    { month: "Apr", amount: 1600 },
-    { month: "May", amount: 2400 },
-    { month: "Jun", amount: 3000 },
-  ];
+const Dashboard = ({ selectedYear, filteredData, totalDonations, totalDonors }) => {
+  // ✅ Function to generate and download PDF
+  const handleDownloadPDF = async () => {
+    const input = document.getElementById("dashboard-report");
 
-  const totalDonations = donations.reduce((sum, d) => sum + d.amount, 0);
-  const numberOfDonors = 45;
+    if (!input) {
+      alert("Dashboard section not found!");
+      return;
+    }
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    const canvas = await html2canvas(input, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+
+    const imgWidth = 190;
+    const pageHeight = 295;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+
+    // Add summary table
+    pdf.addPage();
+    pdf.setFontSize(16);
+    pdf.text(`Donation Report - ${selectedYear}`, 14, 20);
+
+    pdf.setFontSize(12);
+    pdf.text(`Total Donations: ₹${totalDonations.toLocaleString()}`, 14, 30);
+    pdf.text(`Total Donors: ${totalDonors}`, 14, 40);
+
+    // Add Data Table
+    const tableData = filteredData.map((item) => [
+      item.month,
+      `₹${item.amount.toLocaleString()}`,
+      item.donors,
+    ]);
+
+    pdf.autoTable({
+      head: [["Month", "Donations", "Donors"]],
+      body: tableData,
+      startY: 50,
+    });
+
+    pdf.save(`Donation_Report_${selectedYear}.pdf`);
+  };
 
   return (
-    <main className="max-w-4xl mx-auto py-12 px-6">
-      <header className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-brand mb-2">
-          Donation Tracking Dashboard
+    <div className="p-6">
+      {/* 🌟 Header with download button */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex justify-between items-center mb-6"
+      >
+        <h1 className="text-2xl font-bold text-gray-800">
+          Donation Dashboard - {selectedYear}
         </h1>
-        <p className="text-gray-600">
-          Monitor your donation trends and statistics with ease.
-        </p>
-      </header>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-        <div className="bg-blue-100 text-blue-700 p-6 rounded-xl shadow-sm text-center">
-          <h2 className="text-xl font-semibold">Total Donations</h2>
-          <p className="text-3xl font-bold mt-2">
-            ${totalDonations.toLocaleString()}
-          </p>
+        {/* ✅ Download Button */}
+        <button
+          onClick={handleDownloadPDF}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 shadow-md transition duration-200"
+        >
+          📄 Download PDF Report
+        </button>
+      </motion.div>
+
+      {/* 📊 Everything below this div will be captured in PDF */}
+      <div id="dashboard-report" className="bg-white p-6 rounded-lg shadow-md">
+        {/* Example summary cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="p-4 bg-green-100 rounded-lg shadow text-center"
+          >
+            <h2 className="text-xl font-semibold text-gray-800">
+              Total Donations
+            </h2>
+            <p className="text-2xl font-bold text-green-600 mt-2">
+              ₹{totalDonations.toLocaleString()}
+            </p>
+          </motion.div>
+
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="p-4 bg-blue-100 rounded-lg shadow text-center"
+          >
+            <h2 className="text-xl font-semibold text-gray-800">Total Donors</h2>
+            <p className="text-2xl font-bold text-blue-600 mt-2">{totalDonors}</p>
+          </motion.div>
         </div>
 
-        <div className="bg-green-100 text-green-700 p-6 rounded-xl shadow-sm text-center">
-          <h2 className="text-xl font-semibold">Number of Donors</h2>
-          <p className="text-3xl font-bold mt-2">{numberOfDonors}</p>
+        {/* Example table */}
+        <div className="overflow-x-auto">
+          <table className="min-w-full border border-gray-200 text-sm">
+            <thead>
+              <tr className="bg-gray-100 text-gray-700">
+                <th className="p-2 border">Month</th>
+                <th className="p-2 border">Donations (₹)</th>
+                <th className="p-2 border">Donors</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((item, index) => (
+                <tr
+                  key={index}
+                  className="hover:bg-gray-50 transition duration-150"
+                >
+                  <td className="p-2 border text-center">{item.month}</td>
+                  <td className="p-2 border text-center">{item.amount}</td>
+                  <td className="p-2 border text-center">{item.donors}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </section>
-
-      <section className="bg-white rounded-2xl shadow p-6">
-        <DonationChart data={donations} />
-      </section>
-
-      <footer className="text-center text-gray-500 mt-10 text-sm">
-        Built with ❤️ using React + Tailwind CSS
-      </footer>
-    </main>
+      </div>
+    </div>
   );
 };
 
