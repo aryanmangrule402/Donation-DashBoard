@@ -1,0 +1,44 @@
+{
+  "2023": [
+    { "month": "Jan", "amount": 8000, "donors": 10 },
+    { "month": "Feb", "amount": 9500, "donors": 12 },
+    { "month": "Mar", "amount": 11000, "donors": 13 },
+    { "month": "Apr", "amount": 15000, "donors": 17 },
+    { "month": "May", "amount": 13000, "donors": 14 },
+    { "month": "Jun", "amount": 17000, "donors": 18 },
+    { "month": "Jul", "amount": 19000, "donors": 20 },
+    { "month": "Aug", "amount": 21000, "donors": 22 },
+    { "month": "Sep", "amount": 18500, "donors": 19 },
+    { "month": "Oct", "amount": 22000, "donors": 23 },
+    { "month": "Nov", "amount": 25000, "donors": 25 },
+    { "month": "Dec", "amount": 27000, "donors": 26 }
+  ],
+  "2024": [
+    { "month": "Jan", "amount": 12000, "donors": 14 },
+    { "month": "Feb", "amount": 18000, "donors": 18 },
+    { "month": "Mar", "amount": 22000, "donors": 21 },
+    { "month": "Apr", "amount": 30000, "donors": 25 },
+    { "month": "May", "amount": 25000, "donors": 22 },
+    { "month": "Jun", "amount": 27000, "donors": 28 },
+    { "month": "Jul", "amount": 29000, "donors": 32 },
+    { "month": "Aug", "amount": 31000, "donors": 35 },
+    { "month": "Sep", "amount": 26000, "donors": 30 },
+    { "month": "Oct", "amount": 32000, "donors": 33 },
+    { "month": "Nov", "amount": 34000, "donors": 37 },
+    { "month": "Dec", "amount": 38000, "donors": 40 }
+  ],
+  "2025": [
+    { "month": "Jan", "amount": 15000, "donors": 16 },
+    { "month": "Feb", "amount": 19000, "donors": 18 },
+    { "month": "Mar", "amount": 21000, "donors": 22 },
+    { "month": "Apr", "amount": 26000, "donors": 25 },
+    { "month": "May", "amount": 28000, "donors": 27 },
+    { "month": "Jun", "amount": 31000, "donors": 30 },
+    { "month": "Jul", "amount": 33000, "donors": 32 },
+    { "month": "Aug", "amount": 35000, "donors": 35 },
+    { "month": "Sep", "amount": 34000, "donors": 34 },
+    { "month": "Oct", "amount": 37000, "donors": 38 },
+    { "month": "Nov", "amount": 39000, "donors": 40 },
+    { "month": "Dec", "amount": 42000, "donors": 44 }
+  ]
+}
